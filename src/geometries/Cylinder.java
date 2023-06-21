@@ -4,8 +4,6 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
-import java.util.List;
-
 import static primitives.Util.isZero;
 
 /**
@@ -37,6 +35,7 @@ public class Cylinder extends Tube {
      *
      * @return height of the cylinder
      */
+    @SuppressWarnings("unused")
     public double getHeight() {
         return height;
     }
@@ -47,17 +46,10 @@ public class Cylinder extends Tube {
         if (point.equals(this.axisRay.getP0())) return this.axisRay.getDir();
 
         //calculating distance of the given point from base point of the axis ray
-        Point o = this.axisRay.getP0();
         double t = this.axisRay.getDir().dotProduct(point.subtract(this.axisRay.getP0()));
         //if the given point is on one of the bases of the cylinder, we just return a normal vector to the base (dir)
         if (isZero(t) || isZero(t - this.height)) return this.axisRay.getDir();
         return super.getNormal(point);
     }
 
-    @Override
-    public List<Point> findIntersections(Ray ray) {
-        return null;
-    }
-
-    ;
 }

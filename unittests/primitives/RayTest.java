@@ -1,9 +1,7 @@
 package primitives;
 
-import geometries.Sphere;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,6 +12,25 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author Avraham Hassson
  */
 public class RayTest {
+
+    /**
+     * Test method for {@link Ray#getP0()}.
+     */
+    @Test
+    public void testGetP0() {
+        Ray r = new Ray(new Point(1,1,1),new Vector(2,2,2));
+        Point result = new Point(1,1,1);
+        assertEquals(r.getP0(), result, "does not return the correct point");
+    }
+    /**
+     * Test method for {@link Ray#getDir()}.
+     */
+    @Test
+    public void testGetDir() {
+        Ray r = new Ray(new Point(1,1,1),new Vector(2,2,2));
+        Point result = new Vector(2,2,2).normalize();
+        assertEquals(r.getDir(), result, "does not return the correct direction");
+    }
     /**
      * Test method for {@link primitives.Ray#findClosestPoint(List)}.
      */

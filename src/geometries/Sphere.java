@@ -33,6 +33,7 @@ public class Sphere extends RadialGeometry {
      *
      * @return center point of the sphere
      */
+    @SuppressWarnings("unused")
     public Point getCenter() {
         return center;
     }
@@ -56,9 +57,9 @@ public class Sphere extends RadialGeometry {
         double tm = dir.dotProduct(u);
         double dSquared = u.lengthSquared() - tm * tm;
         double thSquared = alignZero(radiusSquared - dSquared);
-        if (thSquared <= 0) { //ray does not intersect or tangent
+        if (thSquared <= 0) //ray does not intersect or tangent
             return null;
-        }
+
         double th = Math.sqrt(thSquared);
         double t2 = alignZero(tm + th);
         if (t2 <= 0)

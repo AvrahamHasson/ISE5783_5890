@@ -3,6 +3,7 @@ package scene;
 import geometries.Geometries;
 import lighting.AmbientLight;
 import primitives.Color;
+
 /**
  * Represents a scene in a computer graphics environment.
  *
@@ -12,19 +13,20 @@ public class Scene {
     /**
      * The name of the scene.
      */
-    public String name;
+    public final String name;
     /**
      * The background color of the scene.
      */
-    public Color background;
+    public Color background = Color.BLACK;
     /**
      * The ambient light of the scene.
      */
-    public AmbientLight ambientLight;
+    public AmbientLight ambientLight = AmbientLight.NONE;
     /**
      * The geometries in the scene.
      */
-    public Geometries geometries;
+    public Geometries geometries = new Geometries();
+
     /**
      * Constructs a new Scene object with the given name.
      *
@@ -32,10 +34,8 @@ public class Scene {
      */
     public Scene(String name) {
         this.name = name;
-        this.background = Color.BLACK;
-        this.ambientLight = AmbientLight.NONE;
-        this.geometries = new Geometries();
     }
+
     /**
      * Sets the background color of the scene.
      *
@@ -46,6 +46,7 @@ public class Scene {
         this.background = background;
         return this;
     }
+
     /**
      * Sets the ambient light of the scene.
      *
@@ -56,6 +57,7 @@ public class Scene {
         this.ambientLight = ambientLight;
         return this;
     }
+
     /**
      * Sets the geometries of the scene.
      *

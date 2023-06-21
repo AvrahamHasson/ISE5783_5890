@@ -1,7 +1,5 @@
 package primitives;
 
-import lighting.AmbientLight;
-
 /**
  * Class Point is the basic class representing a point of Euclidean geometry in Cartesian
  * 3-Dimensional coordinate system.
@@ -63,7 +61,7 @@ public class Point {
 
     @Override
     public String toString() {
-        return "" + xyz;
+        return "P" + xyz;
     }
 
     /**

@@ -12,6 +12,7 @@ import renderer.Camera;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Testing the integration between the constructRay function and the findIntersections function
@@ -20,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  *
  * @author Avraham Hasson
  */
-
 public class CameraIntegrationTest {
     /**
      * Calculates the number of intersections between the given geometric object and rays constructed by the camera for each pixel in its view.
@@ -31,12 +31,11 @@ public class CameraIntegrationTest {
      */
     public int launcher(Intersectable geometric, Camera cam) {
         int sum = 0;
-        //list - temporarily keeps the intersection points
-        //useful when there are no intersection points, so we need to check if it's null
-        List<Point> list;
         for (int i = 0; i < cam.getViewPlaneW(); i++)
             for (int j = 0; j < cam.getViewPlaneH(); j++) {
-                list = geometric.findIntersections(cam.constructRay(3, 3, i, j));
+                //list - temporarily keeps the intersection points
+                //useful when there are no intersection points, so we need to check if it's null
+                List<Point> list = geometric.findIntersections(cam.constructRay(3, 3, i, j));
                 if (list != null)
                     sum += list.size();
             }
@@ -88,8 +87,7 @@ public class CameraIntegrationTest {
         Camera cam5 = new Camera(new Point(0, 0, 0.5), vTo, vUp);
         cam5.setVPSize(3, 3);
         cam5.setVPDistance(1);
-        assertEquals(0,
-                launcher(new Sphere(new Point(0, 0, 1), 0.5), cam5),
+        assertTrue(primitives.Util.isZero(launcher(new Sphere(new Point(0, 0, 1), 0.5), cam5)),
                 wrongNumber);
 
     }

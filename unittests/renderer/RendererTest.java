@@ -1,22 +1,28 @@
 package renderer;
 
-import static java.awt.Color.YELLOW;
-
-import org.junit.jupiter.api.Test;
-
 import geometries.Sphere;
 import geometries.Triangle;
 import lighting.AmbientLight;
-import primitives.*;
-import renderer.*;
+import org.junit.jupiter.api.Test;
+import primitives.Color;
+import primitives.Double3;
+import primitives.Point;
+import primitives.Vector;
 import scene.Scene;
 
-/** Test rendering a basic image
- * @author Dan */
+import static java.awt.Color.YELLOW;
+
+/**
+ * Test rendering a basic image
+ *
+ * @author Dan
+ */
 public class RendererTest {
 
-    /** Produce a scene with basic 3D model and render it into a png image with a
-     * grid */
+    /**
+     * Produce a scene with basic 3D model and render it into a png image with a
+     * grid
+     */
     @Test
     public void basicRenderTwoColorTest() {
         Scene scene = new Scene("Test scene")//
@@ -79,20 +85,19 @@ public class RendererTest {
     // }
 
     /** Test for XML based scene - for bonus
-    @Test
-    public void basicRenderXml() {
-        Scene  scene  = new Scene("XML Test scene");
-        // enter XML file name and parse from XML file into scene object
-        // using the code you added in appropriate packages
-        // ...
-        // NB: unit tests is not the correct place to put XML parsing code
+     @Test public void basicRenderXml() {
+     Scene  scene  = new Scene("XML Test scene");
+     // enter XML file name and parse from XML file into scene object
+     // using the code you added in appropriate packages
+     // ...
+     // NB: unit tests is not the correct place to put XML parsing code
 
-        Camera camera = new Camera(Point.ZERO, new Vector(0, 0, -1), new Vector(0, 1, 0))     //
-                .setVPDistance(100)                                                                //
-                .setVPSize(500, 500).setImageWriter(new ImageWriter("xml render test", 1000, 1000))
-                .setRayTracer(new RayTracerBasic(scene));
-        camera.renderImage();
-        camera.printGrid(100, new Color(YELLOW));
-        camera.writeToImage();
-    }*/
+     Camera camera = new Camera(Point.ZERO, new Vector(0, 0, -1), new Vector(0, 1, 0))     //
+     .setVPDistance(100)                                                                //
+     .setVPSize(500, 500).setImageWriter(new ImageWriter("xml render test", 1000, 1000))
+     .setRayTracer(new RayTracerBasic(scene));
+     camera.renderImage();
+     camera.printGrid(100, new Color(YELLOW));
+     camera.writeToImage();
+     }*/
 }

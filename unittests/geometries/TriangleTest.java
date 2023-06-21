@@ -37,6 +37,9 @@ class TriangleTest {
                     "Triangle's normal is not orthogonal to one of the vectors of the plane");
     }
 
+    /**
+     * Test method for {@link geometries.Sphere#findIntersections(Ray)}.
+     */
     @Test
     void testFindIntersections() {
         Triangle triangle = new Triangle(new Point(-1, 0, 1), new Point(1, 0, 1), new Point(0, 2, 1));

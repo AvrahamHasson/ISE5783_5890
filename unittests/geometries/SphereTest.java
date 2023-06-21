@@ -35,6 +35,9 @@ class SphereTest {
         assertEquals(new Vector(1, 0, 0), result, "getNormal() wrong result");
     }
 
+    /**
+     * Test method for {@link geometries.Sphere#findIntersections(Ray)}.
+     */
     @Test
     public void testFindIntersections() {
         Sphere sphere = new Sphere(new Point(1, 0, 0), 1);

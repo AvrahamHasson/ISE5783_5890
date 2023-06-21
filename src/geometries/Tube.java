@@ -34,6 +34,7 @@ public class Tube extends RadialGeometry {
      *
      * @return axis ray of the tube
      */
+    @SuppressWarnings("unused")
     public Ray getAxisRay() {
         return axisRay;
     }
@@ -48,6 +49,4 @@ public class Tube extends RadialGeometry {
     public List<Point> findIntersections(Ray ray) {
         return null;
     }
-
-    ;
 }

@@ -1,9 +1,11 @@
 package primitives;
 
+import geometries.Sphere;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
 
 /**
  * Unit tests for primitives.Point class
@@ -61,7 +63,7 @@ class PointTest {
         assertEquals(14, p1.distanceSquared(p0), 0.00001,
                 "ERROR: Point.distanceSquared() does not work when distance is from p0");
         // TC2: squared distance from the same point = 0
-        assertEquals(0, alignZero(p1.distanceSquared(p1)), //
+        assertTrue(isZero(p1.distanceSquared(p1)), //
                 "ERROR: Point.distanceSquared does not work from point to itself");
     }
 
@@ -79,6 +81,6 @@ class PointTest {
 
         // =============== Boundary Values Tests ==================
         // TC11: test distance zero from distance of the same point from itself
-        assertTrue(primitives.Util.isZero(p1.distance(p1)), "distance() when equals 0 wrong result");
+        assertTrue(isZero(p1.distance(p1)), "distance() when equals 0 wrong result");
     }
 }

@@ -5,6 +5,9 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import static primitives.Util.alignZero;
+import static primitives.Util.isZero;
+
 /**
  * class Camera is a class representing a Camera
  * that shoots from a certain place, in a certain direction,
@@ -33,6 +36,7 @@ public class Camera {
      * Intended for dyeing the rays.
      */
     private RayTracerBase rayTracerBase;
+
     /**
      * Constructor to initialize Camera based on the location point of the Camera,
      * a vector that points towards the camera, and
@@ -43,7 +47,7 @@ public class Camera {
      * @param vU points to the right of the camera.
      */
     public Camera(Point p, Vector vT, Vector vU) {
-        if (0 != vU.dotProduct(vT))
+        if (!isZero(vU.dotProduct(vT)))
             throw new IllegalArgumentException("The vectors must be perpendicular to each other");
         this.p0 = p;
         this.vUp = vU.normalize();
@@ -65,6 +69,7 @@ public class Camera {
      *
      * @return above the Camera.
      */
+    @SuppressWarnings("unused")
     public Vector getVUp() {
         return vUp;
     }
@@ -74,6 +79,7 @@ public class Camera {
      *
      * @return Camera direction.
      */
+    @SuppressWarnings("unused")
     public Vector getVTo() {
         return vTo;
     }
@@ -101,6 +107,7 @@ public class Camera {
      *
      * @return view plane distance.
      */
+    @SuppressWarnings("unused")
     public double getViewPlaneD() {
         return viewPlaneD;
     }
@@ -113,7 +120,7 @@ public class Camera {
      * @return the Camera.
      */
     public Camera setVPSize(double width, double height) {
-        if (width <= 0 || height <= 0)
+        if (alignZero(width) <= 0 || alignZero(height) <= 0)
             throw new IllegalArgumentException("The height and width must be greater than zero");
         this.viewPlaneH = height;
         this.viewPlaneW = width;
@@ -127,11 +134,12 @@ public class Camera {
      * @return the Camera.
      */
     public Camera setVPDistance(double distance) {
-        if (distance <= 0)
+        if (alignZero(distance) <= 0)
             throw new IllegalArgumentException("The distance must be greater than zero");
         this.viewPlaneD = distance;
         return this;
     }
+
     /**
      * setter for image writer.
      *
@@ -145,6 +153,7 @@ public class Camera {
 
     /**
      * Setter for ray tracer base.
+     *
      * @param rayTracerBase Ray tracer base.
      * @return The Camera.
      */
@@ -152,6 +161,7 @@ public class Camera {
         this.rayTracerBase = rayTracerBase;
         return this;
     }
+
     /**
      * receives a specific slot, with a selected resolution of the view plane,
      * and returns the ray coming out of the Camera to the view plane.
@@ -166,28 +176,29 @@ public class Camera {
         Point pc = this.p0.add(this.vTo.scale(viewPlaneD));
         double rY = viewPlaneH / (double) nY;
         double rX = viewPlaneW / (double) nX;
-        double yI = -1 * (i - (((double) nY - 1) / 2)) * rY;
+        double yI = -(i - (((double) nY - 1) / 2)) * rY;
         double xJ = (j - ((double) nX - 1) / 2) * rX;
+
         Point pIJ = pc;
         if (xJ != 0)
             pIJ = pIJ.add(vRight.scale(xJ));
         if (yI != 0)
             pIJ = pIJ.add(vUp.scale(yI));
+
         Vector vIJ = pIJ.subtract(p0);
-        Ray ray = new Ray(p0, vIJ);
-        return ray;
+        return new Ray(p0, vIJ);
     }
 
     /**
      * Calculates a color for a specific pixel in an image.
+     *
      * @param nX The number of pixels in a row in the view plane.
      * @param nY The number of pixels in a column in the view plane.
      * @param j  The row number of the pixel.
      * @param i  The column number of the pixel.
-     * @return The pixel color
      */
-    private Color castRay(int nX, int nY, int j, int i) {
-        return this.rayTracerBase.traceRay(this.constructRay(nX, nY, j, i));
+    private void castRay(int nX, int nY, int j, int i) {
+        this.imageWriter.writePixel(j, i, this.rayTracerBase.traceRay(this.constructRay(nX, nY, j, i)));
     }
 
     /**
@@ -197,13 +208,12 @@ public class Camera {
     public void renderImage() {
         if (this.rayTracerBase == null || this.imageWriter == null || this.viewPlaneW == 0 || this.viewPlaneH == 0 || this.viewPlaneD == 0)
             throw new UnsupportedOperationException("MissingResourcesException");
+
         int nX = imageWriter.getNx();
         int nY = imageWriter.getNy();
-        for (int i = 0; i < nY; i++) {
-            for (int j = 0; j < nX; j++) {
-                imageWriter.writePixel(j, i, this.castRay(nX, nY, j, i));
-            }
-        }
+        for (int i = 0; i < nY; i++)
+            for (int j = 0; j < nX; j++)
+                this.castRay(nX, nY, j, i);
     }
 
     /**
@@ -211,18 +221,17 @@ public class Camera {
      * Throws UnsupportedOperationException if imageWriter object is null.
      *
      * @param interval The spacing between grid lines.
-     * @param color The color to use for the grid lines.
+     * @param color    The color to use for the grid lines.
      */
     public void printGrid(int interval, Color color) {
         if (imageWriter == null) throw new UnsupportedOperationException("MissingResourcesException");
-        for (int i = 0; i < imageWriter.getNy(); i++)
-            if (i % interval == 0) {
-                for (int j = 0; j < imageWriter.getNx(); j++) {
-                    imageWriter.writePixel(j, i, color);
-                }
-            } else for (int j = 0; j < imageWriter.getNx(); j += interval) {
-                imageWriter.writePixel(j, i, color);
-            }
+
+        int nX = imageWriter.getNx();
+        int nY = imageWriter.getNy();
+        for (int i = 0; i < nY; i++)
+            for (int j = 0; j < nX; j++)
+                if (i % interval == 0 || j % interval == 0)
+                    this.imageWriter.writePixel(j, i, color);
     }
 
     /**
