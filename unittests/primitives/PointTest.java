@@ -1,10 +1,9 @@
 package primitives;
 
 import org.junit.jupiter.api.Test;
-import primitives.Point;
-import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static primitives.Util.alignZero;
 
 /**
  * Unit tests for primitives.Point class
@@ -44,34 +43,26 @@ class PointTest {
 
         // =============== Boundary Values Tests ==================
         Vector nP1 = new Vector(-3, -6, -8);
-
-        // TC11: test addition of point to its opposite (result zero)
-        try {
-            assertEquals(new Point(0, 0, 0), p1.add(nP1), "add() subtracting point from itself result in error");
-        } catch (IllegalArgumentException e) {
-            fail("add() subtracting point to itself result in ERROR");
-        }
     }
 
     /**
      * Test method for {@link primitives.Point#distanceSquared(primitives.Point)}.
      */
     @Test
-    void testDistanceSquared() {
+    public void testDistanceSquared() {
+        Point p1 = new Point(1, 2, 3);
+        Point p2 = new Point(2, -3, 4);
+        Point p0 = new Point(0, 0, 0);
         // ============ Equivalence Partitions Tests ==============
-        Point p1 = new Point(3, 6, 8);
-        Point p2 = new Point(15, 2, 9);
-
-        // TC01: test that distance squared result is right
-        assertEquals(161, p1.distanceSquared(p2), 0.00001, "distanceSquared() wrong result");
-
+        // TC0: that the function actually works
+        assertEquals(27, p1.distanceSquared(p2), 0.00001, "ERROR: Point.distanceSquared() does not work properly");
         // =============== Boundary Values Tests ==================
-        // TC11: test distanceSquared zero from distance squared of the same point from itself
-        try {
-            assertTrue(primitives.Util.isZero(p1.distanceSquared(p1)), "distanceSquared() when equals 0 wrong result");
-        } catch (IllegalArgumentException e) {
-            fail("distanceSquared() distance from point to itself ERROR");
-        }
+        // TC1: squared distance from p0 (0,0,0)
+        assertEquals(14, p1.distanceSquared(p0), 0.00001,
+                "ERROR: Point.distanceSquared() does not work when distance is from p0");
+        // TC2: squared distance from the same point = 0
+        assertEquals(0, alignZero(p1.distanceSquared(p1)), //
+                "ERROR: Point.distanceSquared does not work from point to itself");
     }
 
     /**

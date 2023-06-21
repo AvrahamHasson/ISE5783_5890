@@ -8,7 +8,7 @@ package primitives;
  */
 public class Vector extends Point {
     /**
-     * Constructor to initialize Vector based on a 3 double numbers (Double3) value
+     * Constructor to initialize Vector based on 3 double numbers (Double3) value
      *
      * @param vec number value for all 3 numbers
      * @throws IllegalArgumentException if xyz = (0,0,0)
@@ -29,21 +29,17 @@ public class Vector extends Point {
      */
     public Vector(double x, double y, double z) {
         super(x, y, z);
-        if (Util.isZero(x) && Util.isZero(y) && Util.isZero(z))
+        if (xyz.equals(Double3.ZERO))
             throw new IllegalArgumentException("cannot create a zero vector");
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
+        if (this == obj)
+            return true;
         if (obj instanceof Vector other)
-            return super.equals(other);
+            return super.equals(obj);
         return false;
-    }
-
-    @Override
-    public int hashCode() {
-        return xyz.hashCode();
     }
 
     @Override
@@ -119,13 +115,13 @@ public class Vector extends Point {
      */
     public double length() {
         //for any vector v, |V| = sqrt(v * v) [dot product]
-        return java.lang.Math.sqrt(this.lengthSquared());
+        return Math.sqrt(this.lengthSquared());
     }
 
     /**
      * normalizes the vector
      *
-     * @return normalized vector
+     * @return a new normalized vector
      */
     public Vector normalize() {
         return new Vector(this.xyz.reduce(this.length()));

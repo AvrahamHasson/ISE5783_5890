@@ -1,8 +1,7 @@
 package renderer;
 
 import org.junit.jupiter.api.Test;
-import primitives.*;
-import renderer.*;
+import primitives.Color;
 
 /**
  * A test class for the ImageWriter class.

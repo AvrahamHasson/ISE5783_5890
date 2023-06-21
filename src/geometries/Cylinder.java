@@ -18,7 +18,7 @@ public class Cylinder extends Tube {
     /**
      * height of the tube
      */
-    final double height;
+    final private double height;
 
     /**
      * Constructor to initialize Cylinder based on given axis ray, radius, and height
@@ -51,7 +51,7 @@ public class Cylinder extends Tube {
         double t = this.axisRay.getDir().dotProduct(point.subtract(this.axisRay.getP0()));
         //if the given point is on one of the bases of the cylinder, we just return a normal vector to the base (dir)
         if (isZero(t) || isZero(t - this.height)) return this.axisRay.getDir();
-        return point.subtract(o.add(this.axisRay.getDir().scale(t))).normalize();
+        return super.getNormal(point);
     }
 
     @Override

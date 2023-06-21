@@ -1,8 +1,9 @@
 package renderer;
 
+import primitives.Color;
 import primitives.Point;
-import primitives.Vector;
 import primitives.Ray;
+import primitives.Vector;
 
 /**
  * class Camera is a class representing a Camera
@@ -13,7 +14,7 @@ import primitives.Ray;
  */
 public class Camera {
     /**
-     *The point where the Camera is located.
+     * The point where the Camera is located.
      */
     Point p0;
     /**
@@ -25,11 +26,19 @@ public class Camera {
      */
     double viewPlaneH, viewPlaneW, viewPlaneD;
     /**
+     * Intended for creating the image file
+     */
+    private ImageWriter imageWriter;
+    /**
+     * Intended for dyeing the rays.
+     */
+    private RayTracerBase rayTracerBase;
+    /**
      * Constructor to initialize Camera based on the location point of the Camera,
      * a vector that points towards the camera, and
      * a vector that points to the right of the camera.
      *
-     * @param p Camera location.
+     * @param p  Camera location.
      * @param vT points towards the camera.
      * @param vU points to the right of the camera.
      */
@@ -41,6 +50,7 @@ public class Camera {
         this.vTo = vT.normalize();
         this.vRight = vT.crossProduct(vU).normalize();
     }
+
     /**
      * getter for Camera location.
      *
@@ -49,6 +59,7 @@ public class Camera {
     public Point getP0() {
         return p0;
     }
+
     /**
      * getter for above the Camera.
      *
@@ -57,6 +68,7 @@ public class Camera {
     public Vector getVUp() {
         return vUp;
     }
+
     /**
      * getter for Camera direction.
      *
@@ -65,6 +77,7 @@ public class Camera {
     public Vector getVTo() {
         return vTo;
     }
+
     /**
      * getter for view plane height.
      *
@@ -73,6 +86,7 @@ public class Camera {
     public double getViewPlaneH() {
         return viewPlaneH;
     }
+
     /**
      * getter for view plane width.
      *
@@ -81,6 +95,7 @@ public class Camera {
     public double getViewPlaneW() {
         return viewPlaneW;
     }
+
     /**
      * getter for view plane distance.
      *
@@ -93,9 +108,8 @@ public class Camera {
     /**
      * setter for view plane width and height.
      *
-     * @param width view plane width.
+     * @param width  view plane width.
      * @param height view plane height.
-     *
      * @return the Camera.
      */
     public Camera setVPSize(double width, double height) {
@@ -110,7 +124,6 @@ public class Camera {
      * setter for view plane distance.
      *
      * @param distance view plane distance.
-     *
      * @return the Camera.
      */
     public Camera setVPDistance(double distance) {
@@ -119,23 +132,42 @@ public class Camera {
         this.viewPlaneD = distance;
         return this;
     }
+    /**
+     * setter for image writer.
+     *
+     * @param imageWriter image writer.
+     * @return the Camera.
+     */
+    public Camera setImageWriter(ImageWriter imageWriter) {
+        this.imageWriter = imageWriter;
+        return this;
+    }
 
+    /**
+     * Setter for ray tracer base.
+     * @param rayTracerBase Ray tracer base.
+     * @return The Camera.
+     */
+    public Camera setRayTracer(RayTracerBase rayTracerBase) {
+        this.rayTracerBase = rayTracerBase;
+        return this;
+    }
     /**
      * receives a specific slot, with a selected resolution of the view plane,
      * and returns the ray coming out of the Camera to the view plane.
+     *
      * @param nX The number of pixels in a row in the view plane.
      * @param nY The number of pixels in a column in the view plane.
-     * @param j The row number of the pixel.
-     * @param i The column number of the pixel.
-     *
+     * @param j  The row number of the pixel.
+     * @param i  The column number of the pixel.
      * @return ray coming out of the Camera to the view plane.
      */
     public Ray constructRay(int nX, int nY, int j, int i) {
         Point pc = this.p0.add(this.vTo.scale(viewPlaneD));
-        double rY = viewPlaneH / (double)nY;
-        double rX = viewPlaneW / (double)nX;
-        double yI = -1 * (i - (((double)nY - 1) / 2)) * rY;
-        double xJ = (j - ((double)nX - 1) / 2) * rX;
+        double rY = viewPlaneH / (double) nY;
+        double rX = viewPlaneW / (double) nX;
+        double yI = -1 * (i - (((double) nY - 1) / 2)) * rY;
+        double xJ = (j - ((double) nX - 1) / 2) * rX;
         Point pIJ = pc;
         if (xJ != 0)
             pIJ = pIJ.add(vRight.scale(xJ));
@@ -144,5 +176,61 @@ public class Camera {
         Vector vIJ = pIJ.subtract(p0);
         Ray ray = new Ray(p0, vIJ);
         return ray;
+    }
+
+    /**
+     * Calculates a color for a specific pixel in an image.
+     * @param nX The number of pixels in a row in the view plane.
+     * @param nY The number of pixels in a column in the view plane.
+     * @param j  The row number of the pixel.
+     * @param i  The column number of the pixel.
+     * @return The pixel color
+     */
+    private Color castRay(int nX, int nY, int j, int i) {
+        return this.rayTracerBase.traceRay(this.constructRay(nX, nY, j, i));
+    }
+
+    /**
+     * Renders the image by casting rays from the camera through each pixel of the image and writing the resulting color to the imageWriter.
+     * Throws UnsupportedOperationException if any of the required resources are missing (rayTracerBase, imageWriter, width, height, distance).
+     */
+    public void renderImage() {
+        if (this.rayTracerBase == null || this.imageWriter == null || this.viewPlaneW == 0 || this.viewPlaneH == 0 || this.viewPlaneD == 0)
+            throw new UnsupportedOperationException("MissingResourcesException");
+        int nX = imageWriter.getNx();
+        int nY = imageWriter.getNy();
+        for (int i = 0; i < nY; i++) {
+            for (int j = 0; j < nX; j++) {
+                imageWriter.writePixel(j, i, this.castRay(nX, nY, j, i));
+            }
+        }
+    }
+
+    /**
+     * Draws a grid on the image by writing a specified color to the pixels that fall on the grid lines.
+     * Throws UnsupportedOperationException if imageWriter object is null.
+     *
+     * @param interval The spacing between grid lines.
+     * @param color The color to use for the grid lines.
+     */
+    public void printGrid(int interval, Color color) {
+        if (imageWriter == null) throw new UnsupportedOperationException("MissingResourcesException");
+        for (int i = 0; i < imageWriter.getNy(); i++)
+            if (i % interval == 0) {
+                for (int j = 0; j < imageWriter.getNx(); j++) {
+                    imageWriter.writePixel(j, i, color);
+                }
+            } else for (int j = 0; j < imageWriter.getNx(); j += interval) {
+                imageWriter.writePixel(j, i, color);
+            }
+    }
+
+    /**
+     * Writes the rendered image to the output file using the imageWriter object.
+     * Throws UnsupportedOperationException if imageWriter object is null.
+     */
+    public void writeToImage() {
+        if (imageWriter == null) throw new UnsupportedOperationException("MissingResourcesException");
+        this.imageWriter.writeToImage();
     }
 }

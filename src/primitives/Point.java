@@ -1,5 +1,7 @@
 package primitives;
 
+import lighting.AmbientLight;
+
 /**
  * Class Point is the basic class representing a point of Euclidean geometry in Cartesian
  * 3-Dimensional coordinate system.
@@ -8,13 +10,13 @@ package primitives;
  */
 public class Point {
     /**
+     * Represents a constant representing the zero point.
+     */
+    public static final Point ZERO = new Point(0,0,0);
+    /**
      * 3-dimensional coordinates
      */
     final Double3 xyz;
-
-    public double getX() {
-        return xyz.d1;
-    }
 
     /**
      * Constructor to initialize Point based object with one 3 double numbers (Double3) value
@@ -36,11 +38,21 @@ public class Point {
         this.xyz = new Double3(x, y, z);
     }
 
+    /**
+     * getter for the first coordinate.
+     *
+     * @return the first coordinate.
+     */
+    public double getX() {
+        return xyz.d1;
+    }
+
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;
+        if (this == obj)
+            return true;
         if (obj instanceof Point other)
-            return this.xyz.equals(other.xyz);
+            return xyz.equals(other.xyz);
         return false;
     }
 
@@ -51,7 +63,7 @@ public class Point {
 
     @Override
     public String toString() {
-        return xyz.toString();
+        return "" + xyz;
     }
 
     /**
@@ -85,9 +97,10 @@ public class Point {
     public double distanceSquared(Point point) {
         //distance between points (x1,y1,z1), (x2,y2,z2) squared is
         // (x1-x2)^2 + (y1-y2)^2 + (z1-z2)^2
-        return (this.xyz.d1 - point.xyz.d1) * (this.xyz.d1 - point.xyz.d1) +
-                (this.xyz.d2 - point.xyz.d2) * (this.xyz.d2 - point.xyz.d2) +
-                (this.xyz.d3 - point.xyz.d3) * (this.xyz.d3 - point.xyz.d3);
+        double dx = this.xyz.d1 - point.xyz.d1;
+        double dy = this.xyz.d2 - point.xyz.d2;
+        double dz = this.xyz.d3 - point.xyz.d3;
+        return dx * dx + dy * dy + dz * dz;
     }
 
     /**
@@ -99,6 +112,6 @@ public class Point {
     public double distance(Point point) {
         //distance between points (x1,y1,z1), (x2,y2,z2) is
         // sqrt((x1-x2)^2 + (y1-y2)^2 + (z1-z2)^2)
-        return java.lang.Math.sqrt(this.distanceSquared(point));
+        return Math.sqrt(this.distanceSquared(point));
     }
 }

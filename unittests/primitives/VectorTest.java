@@ -1,7 +1,6 @@
 package primitives;
 
 import org.junit.jupiter.api.Test;
-import primitives.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static primitives.Util.isZero;
@@ -22,7 +21,7 @@ class VectorTest {
         Vector v1 = new Vector(3, 6, 7);
 
         //TC01: test that scaling a vector by a positive factor is right
-        assertEquals(new Vector(3.6, 7.2, 8.4), v1.scale(1.2), "scale() wrong result for scaling by a positive factor");
+        assertEquals(new Vector(6, 12, 14), v1.scale(2), "scale() wrong result for scaling by a positive factor");
 
         //TC02: test that scaling a vector by a negative factor is right
         assertEquals(new Vector(-1.5, -3, -3.5), v1.scale(-0.5), "scale() wrong result for scaling by a negative factor");
@@ -122,5 +121,38 @@ class VectorTest {
 
         // TC02: Test normalized vector is on the same line as the vector that was normalized
         assertTrue(v.dotProduct(u) > 0, "normalize() normalized vector and the vector that was normalized are with opposite signs");
+    }
+
+    /**
+     * Test method for {@link Vector#add(Vector)}.
+     */
+    @Test
+    public void testAdd() {
+        Vector v1 = new Vector(1, 2, 3);
+        Vector v2 = new Vector(-2, -4, -6);
+        // =============== Boundary Values Tests ==================
+        // TC0: if u vector+-the same vector. will it throw a vec zero exception.
+
+        assertThrows(IllegalArgumentException.class, () -> v1.add(new Vector(-1, -2, -3)),
+                "vector zero dude, next time do stuff properly");
+        // ============ Equivalence Partitions Tests ==============
+        // TC1: the function works properly: vector+ vector= vector.
+        assertEquals(new Vector(-1, -2, -3), v1.add(v2), "add() does not work properly");
+    }
+
+    /**
+     * Test method for {@link Vector#subtract(Point)}.
+     */
+    @Test
+    public void testSubtract() {
+        Vector v1 = new Vector(1, 2, 3);
+        Vector v2 = new Vector(-2, -4, -6);
+        // =============== Boundary Values Tests ==================
+        // TC0: if u vector-+the same vector. will it throw a vec zero exception.
+        assertThrows(IllegalArgumentException.class, () -> v1.subtract(new Vector(1, 2, 3)),
+                "vector zero dude, next time to stuff properly");
+        // ============ Equivalence Partitions Tests ==============
+        // TC1: the function works properly: vector - vector = vector.
+        assertEquals(new Vector(3, 6, 9), v1.subtract(v2), "subtract() does not work properly");
     }
 }

@@ -1,5 +1,9 @@
 package primitives;
 
+import java.util.List;
+
+import static primitives.Util.isZero;
+
 /**
  * Class Ray is the basic class representing a ray of Euclidean geometry in Cartesian
  * 3-Dimensional coordinate system.
@@ -10,40 +14,11 @@ public class Ray {
     /**
      * starting point of the ray
      */
-    final Point p0;
+    private final Point p0;
     /**
      * direction vector of the ray
      */
-    final Vector dir;
-
-    /**
-     * getter for starting point of the ray p0
-     *
-     * @return p0
-     */
-    public Point getP0() {
-        return p0;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Ray ray = (Ray) o;
-
-        if (!p0.equals(ray.p0)) return false;
-        return dir.equals(ray.dir);
-    }
-
-    /**
-     * getter for direction vector of the ray dir
-     *
-     * @return dir
-     */
-    public Vector getDir() {
-        return dir;
-    }
+    private final Vector dir;
 
     /**
      * Constructor to initialize Ray based on point and a vector
@@ -56,18 +31,73 @@ public class Ray {
         this.dir = dir.normalize();
     }
 
+    /**
+     * getter for starting point of the ray p0
+     *
+     * @return p0
+     */
+    public Point getP0() {
+        return p0;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj instanceof Ray other)
+            return this.p0.equals(other.p0) && this.dir.equals(other.dir);
+        return false;
+    }
+
+    /**
+     * getter for direction vector of the ray dir
+     *
+     * @return dir
+     */
+    public Vector getDir() {
+        return dir;
+    }
+
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return p0.hashCode() + dir.hashCode();
     }
 
     @Override
     public String toString() {
-        return "Ray: " + "starting point = " + p0.toString() + ", direction = " + dir.toString();
+        return "Ray: " + "starting point = " + p0 + ", direction = " + dir;
     }
 
+    /**
+     * getter for the value of progress of length t on the starting point
+     *
+     * @param t The parameter value.
+     * @return The point on the line corresponding to the parameter value.
+     */
     public Point getPoint(double t) {
-        if(t==0){ return p0;}
-        return p0.add(dir.scale(t));
+        return isZero(t) ? p0 : p0.add(dir.scale(t));
+    }
+
+    /**
+     * Finds the closest point to the start of the ray among the given points.
+     *
+     * @param points The list of points to check.
+     * @return The closest point to the start of the ray.
+     */
+    public Point findClosestPoint(List<Point> points) {
+        if (points == null)
+            return null;
+
+        Point closestPoint = null;
+        double closestDistance = Double.POSITIVE_INFINITY;
+        for (var currentPoint : points) {
+            double currentDistance = currentPoint.distance(this.p0);
+            if (currentDistance < closestDistance) {
+                closestPoint = currentPoint;
+                closestDistance = currentDistance;
+            }
+        }
+
+        return closestPoint;
     }
 }
