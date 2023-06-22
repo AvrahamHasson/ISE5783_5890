@@ -1,5 +1,9 @@
 package geometries;
 
+import primitives.Ray;
+
+import java.util.List;
+
 import static primitives.Util.alignZero;
 
 /**
@@ -8,7 +12,7 @@ import static primitives.Util.alignZero;
  *
  * @author Avraham Hassson
  */
-public abstract class RadialGeometry implements Geometry {
+public abstract class RadialGeometry extends Geometry {
     /**
      * radius of the geometry
      */
@@ -41,4 +45,5 @@ public abstract class RadialGeometry implements Geometry {
     public double getRadius() {
         return radius;
     }
+
 }

@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author Avraham Hassson
  */
-public class Geometries implements Intersectable {
+public class Geometries extends Intersectable {
     /**
      * set of geometric shapes
      */
@@ -44,18 +44,17 @@ public class Geometries implements Intersectable {
         }
     }
 
+
     @Override
-    public List<Point> findIntersections(Ray ray) {
-        List<Point> intersectionsPoints = null;
-        for (Intersectable element : geometries) {
-            var elemIntersections = element.findIntersections(ray);
-            if (elemIntersections != null) {
-                if (intersectionsPoints == null)
-                    intersectionsPoints = new LinkedList<>(elemIntersections);
-                else
-                    intersectionsPoints.addAll(elemIntersections);
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        List<GeoPoint> lp = null;
+        for (Intersectable intersectable : geometries) {
+            var i = intersectable.findGeoIntersectionsHelper(ray);
+            if (i != null) {
+                if (lp == null) lp = new LinkedList<GeoPoint>();
+                lp.addAll(i);
             }
         }
-        return intersectionsPoints;
+        return lp;
     }
 }

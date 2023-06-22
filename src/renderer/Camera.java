@@ -5,6 +5,7 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import static java.lang.System.out;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
@@ -205,7 +206,7 @@ public class Camera {
      * Renders the image by casting rays from the camera through each pixel of the image and writing the resulting color to the imageWriter.
      * Throws UnsupportedOperationException if any of the required resources are missing (rayTracerBase, imageWriter, width, height, distance).
      */
-    public void renderImage() {
+    public Camera renderImage() {
         if (this.rayTracerBase == null || this.imageWriter == null || this.viewPlaneW == 0 || this.viewPlaneH == 0 || this.viewPlaneD == 0)
             throw new UnsupportedOperationException("MissingResourcesException");
 
@@ -214,6 +215,7 @@ public class Camera {
         for (int i = 0; i < nY; i++)
             for (int j = 0; j < nX; j++)
                 this.castRay(nX, nY, j, i);
+        return this;
     }
 
     /**
@@ -228,10 +230,12 @@ public class Camera {
 
         int nX = imageWriter.getNx();
         int nY = imageWriter.getNy();
-        for (int i = 0; i < nY; i++)
+        for (int i = 0; i < nY; i+=interval)
             for (int j = 0; j < nX; j++)
-                if (i % interval == 0 || j % interval == 0)
-                    this.imageWriter.writePixel(j, i, color);
+                this.imageWriter.writePixel(j, i, color);
+        for (int i = 0; i < nX; i+=interval)
+            for (int j = 0; j < nX; j++)
+                this.imageWriter.writePixel(i, j, color);
     }
 
     /**

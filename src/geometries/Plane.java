@@ -15,7 +15,7 @@ import static primitives.Util.isZero;
  *
  * @author Avraham Hassson
  */
-public class Plane implements Geometry {
+public class Plane extends Geometry {
     /**
      * point in plane
      */
@@ -78,18 +78,19 @@ public class Plane implements Geometry {
      * Computes the intersection point(s) between the current plane and a given ray.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
-        // if the ray starts at the reference point in the plane
-        if (ray.getP0().equals(this.q0))
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray){
+        //if the direction is orthogonal to the normal so the ray is parallel to the plane or included
+        if(normal.dotProduct(ray.getDir()) == 0)
             return null;
-
-        //calculate according to the calculation in the course's book
-        Vector rayToNormal = this.q0.subtract(ray.getP0());
-        double numerator = this.normal.dotProduct(rayToNormal);
-        double denominator = this.normal.dotProduct(ray.getDir());
-        if (isZero(denominator)) return null;
-
-        double t = alignZero(numerator / denominator);
-        return t > 0 ? List.of(ray.getPoint(t)) : null;
+        //if the ray begins at the reference point of the plane it will create a vector zero
+        try {
+            double t = normal.dotProduct(q0.subtract(ray.getP0())) / normal.dotProduct(ray.getDir());
+            //if the ray begins at the plane or after the distance t<=0
+            if (t <= 0)
+                return null;
+            return List.of(new GeoPoint(this,ray.getPoint(t)));
+        }catch (IllegalArgumentException e){
+            return null;
+        }
     }
 }

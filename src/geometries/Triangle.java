@@ -3,6 +3,7 @@ package geometries;
 import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
+import geometries.Intersectable.GeoPoint;
 
 import java.util.List;
 
@@ -30,8 +31,8 @@ public class Triangle extends Polygon {
      * Computes the intersection point(s) between the current triangle and a given ray.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
-        var intersection = this.plane.findIntersections(ray);
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        var intersection = plane.findGeoIntersectionsHelper(ray);
         if (intersection == null) //at first find if thar is intersection with the plane of the triangle
             return null;
 
@@ -52,7 +53,7 @@ public class Triangle extends Polygon {
         Vector n3 = v3.crossProduct(v1).normalize();
         double s3 = alignZero(dir.dotProduct(n3));
         if (s1 * s3 <= 0) return null;
-
+        intersection = List.of(new GeoPoint(this,intersection.get(0).point));
         return intersection;
     }
 }

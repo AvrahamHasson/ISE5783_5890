@@ -47,25 +47,36 @@ public class Sphere extends RadialGeometry {
      * Computes the intersection point(s) between the current sphere and a given ray.
      */
     @Override
-    public List<Point> findIntersections(Ray ray) {
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
         Point p0 = ray.getP0();
-        Vector dir = ray.getDir();
-        if (center.equals(p0)) //ray stars at the center
-            return List.of(ray.getPoint(radius));
-
-        Vector u = this.center.subtract(p0);
-        double tm = dir.dotProduct(u);
-        double dSquared = u.lengthSquared() - tm * tm;
-        double thSquared = alignZero(radiusSquared - dSquared);
-        if (thSquared <= 0) //ray does not intersect or tangent
+        Vector v = ray.getDir();
+        Vector u;
+        //if the vector from P0 to the center is the zero vector, return one intersection.
+        try {
+            u = center.subtract(p0);
+        } catch (IllegalArgumentException e) {
+            //Move radius units in the ray direction:
+            return List.of(new GeoPoint(this,ray.getPoint(radius)));
+        }
+        //tm=the projection of u in the direction of v
+        double tm = v.dotProduct(u);
+        double dSquared = isZero(tm) ? u.lengthSquared() : u.lengthSquared() - tm * tm;
+        double thSquared = alignZero(radius * radius - dSquared);
+        //if r<d <=> thSquared<=0, this means that the ray is outside the sphere.
+        if (thSquared <= 0) {
             return null;
-
+        }
         double th = Math.sqrt(thSquared);
-        double t2 = alignZero(tm + th);
-        if (t2 <= 0)
-            return null;
-
         double t1 = alignZero(tm - th);
-        return t1 <= 0 ? List.of(ray.getPoint(t2)) : List.of(ray.getPoint(t1), ray.getPoint(t2));
+        double t2 = alignZero(tm + th);
+        //if: t1>=0 && t2>=0   <=>   the case when the ray starts before the sphere and intersects it twice.
+        if (t1 > 0 && t2 > 0)
+            return List.of(new GeoPoint(this,ray.getPoint(t1)), new GeoPoint(this,ray.getPoint(t2)));
+        //if t2>0 and t1<=0 then return only the point that obtained from t2.
+        if (t2 > 0) {
+            return List.of(new GeoPoint(this,ray.getPoint(t2)));
+        }
+        return null;
+        //the case when t2<=0 and t1>0 cannot happen.
     }
 }

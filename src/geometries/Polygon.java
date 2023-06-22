@@ -4,6 +4,7 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static primitives.Util.isZero;
@@ -14,7 +15,7 @@ import static primitives.Util.isZero;
  *
  * @author Dan
  */
-public class Polygon implements Geometry {
+public class Polygon extends Geometry {
     /**
      * List of polygon's vertices
      */
@@ -93,7 +94,33 @@ public class Polygon implements Geometry {
     }
 
     @Override
-    public List<Point> findIntersections(Ray ray) {
-        return null;
+    protected List<GeoPoint> findGeoIntersectionsHelper(Ray ray) {
+        //checks if the ray intersects the plane and if it doesn't, it doesn't intersect the polygon
+        List<GeoPoint> lp = plane.findGeoIntersectionsHelper(ray);
+        if(lp == null)
+            return null;
+        List<Vector> lv = new LinkedList<>();
+        //now that we know that the point is in the plane we check if it's in the polygon according the formula in the moodle
+        try {
+            for(int i =0;i<vertices.size();++i) {
+                if (i == vertices.size() - 1)
+                    lv.add((vertices.get(0).subtract(vertices.get(i))).crossProduct(vertices.get(i).subtract(lp.get(0).point)));
+                else
+                    lv.add(vertices.get(i+1).subtract(vertices.get(i)).crossProduct(vertices.get(i).subtract(lp.get(0).point)));
+            }
+        }catch (IllegalArgumentException e) {//if one of the vectors is vector 0 => there's no intersections and return null.
+            return null;
+        }
+        //if all the vectors are in the same direction it means that the point is inside the polygon
+        //so, we check it with dot product.
+        double num = 1;
+        for(int i =0;i<lv.size() ;++i){
+            for(int j = i + 1;j< lv.size();++j){
+                if((lv.get(i).dotProduct(lv.get(j))<0))
+                    return null;
+            }
+        }
+        lp = List.of(new GeoPoint(this,lp.get(0).point));
+        return lp;
     }
 }
