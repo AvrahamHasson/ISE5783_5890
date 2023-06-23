@@ -4,7 +4,6 @@ import primitives.Color;
 import primitives.Point;
 import primitives.Vector;
 
-import static java.lang.Math.max;
 
 /**
  * A spotlight is a type of light source that emits light in a specific direction from a point in space.

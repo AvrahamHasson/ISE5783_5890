@@ -31,6 +31,7 @@ public class PointLight extends Light implements LightSource{
      * @param kC the constant attenuation factor
      * @return the updated point light object
      */
+    @SuppressWarnings("unused")
     public PointLight setKC(double kC) {
         this.kC = kC;
         return this;

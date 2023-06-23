@@ -6,9 +6,6 @@ import primitives.Vector;
 
 import java.util.List;
 
-import static primitives.Util.alignZero;
-import static primitives.Util.isZero;
-
 /**
  * class Plane is a class representing a plane
  * of Euclidean geometry in Cartesian 3-Dimensional coordinate system.

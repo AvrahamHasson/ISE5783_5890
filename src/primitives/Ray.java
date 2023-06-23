@@ -94,7 +94,7 @@ public class Ray {
      * Finds the closest GeoPoint to the start of the ray among the given GeoPoints.
      *
      * @param geoPoints The list of GeoPoints to check.
-     * @return The closest Geopoint to the start of the ray.
+     * @return The closest geoPoint to the start of the ray.
      */
     public GeoPoint findClosestGeoPoint(List<GeoPoint> geoPoints) {
         if (geoPoints == null)

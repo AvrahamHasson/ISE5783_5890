@@ -1,10 +1,7 @@
 package primitives;
 
-import geometries.Sphere;
 import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.*;
-import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 
 /**
@@ -42,9 +39,6 @@ class PointTest {
 
         // TC01: test that addition result is right
         assertEquals(new Point(9, 10, 16), p1.add(v1), "add() wrong result");
-
-        // =============== Boundary Values Tests ==================
-        Vector nP1 = new Vector(-3, -6, -8);
     }
 
     /**

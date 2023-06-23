@@ -1,6 +1,5 @@
 package geometries;
 
-import primitives.Point;
 import primitives.Ray;
 
 import java.util.LinkedList;
@@ -51,7 +50,7 @@ public class Geometries extends Intersectable {
         for (Intersectable intersectable : geometries) {
             var i = intersectable.findGeoIntersectionsHelper(ray);
             if (i != null) {
-                if (lp == null) lp = new LinkedList<GeoPoint>();
+                if (lp == null) lp = new LinkedList<>();
                 lp.addAll(i);
             }
         }

@@ -5,7 +5,6 @@ import primitives.Point;
 import primitives.Ray;
 import primitives.Vector;
 
-import static java.lang.System.out;
 import static primitives.Util.alignZero;
 import static primitives.Util.isZero;
 

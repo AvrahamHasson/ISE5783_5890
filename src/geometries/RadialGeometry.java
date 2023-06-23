@@ -1,9 +1,5 @@
 package geometries;
 
-import primitives.Ray;
-
-import java.util.List;
-
 import static primitives.Util.alignZero;
 
 /**

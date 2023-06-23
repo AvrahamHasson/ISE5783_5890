@@ -5,7 +5,6 @@ import static java.awt.Color.*;
 import org.junit.jupiter.api.Test;
 
 import geometries.*;
-import lighting.*;
 import primitives.*;
 import renderer.*;
 import scene.Scene;
@@ -184,6 +183,9 @@ public class LightsTest {
                 .renderImage() //
                 .writeToImage(); //
     }
+
+    /** Produce a picture of a sphere lighted by a multiple Lights */
+    @Test
     public void multipleLightsSphere() {
         Color directionLightColor = new Color(476, 442, 260);
         Color pointLightColor = new Color(65, 800, 400);
@@ -209,7 +211,7 @@ public class LightsTest {
         scene1.geometries.add(sphere);
         scene1.lights
                 .add(new SpotLight(sphereLightColor, sphereLightPosition, new Vector(1, 1, -0.5))
-                        .setNarrowBeam(10).setKL(0.001).setKQ(0.00004));
+                        .setNarrowBeam(20).setKL(0.001).setKQ(0.00004));
 
         ImageWriter imageWriter = new ImageWriter("lightSphereSpotSharp", 500, 500);
         camera1.setImageWriter(imageWriter) //

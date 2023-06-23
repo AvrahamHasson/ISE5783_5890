@@ -33,6 +33,7 @@ public class Vector extends Point {
             throw new IllegalArgumentException("cannot create a zero vector");
     }
 
+    @SuppressWarnings("unused")
     @Override
     public boolean equals(Object obj) {
         if (this == obj)

@@ -64,7 +64,7 @@ public abstract class Intersectable {
 
     /**
      * Returns the collection of intersection points between the ray and the geometry
-     * So that for each intersection point we know what body it cuts..
+     * So that for each intersection point we know what body it cuts.
      *
      * @param ray The ray that creates the intersection points.
      * @return The points of intersection of the geometry with the ray.

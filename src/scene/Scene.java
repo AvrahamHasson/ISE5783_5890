@@ -84,6 +84,7 @@ public class Scene {
      * @param lights the new LightSource of the scene
      * @return the Scene object with the updated LightSources.
      */
+    @SuppressWarnings("unused")
     public Scene setLights(List<LightSource> lights) {
         this.lights = lights;
         return this;

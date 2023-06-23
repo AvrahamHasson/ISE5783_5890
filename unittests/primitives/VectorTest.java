@@ -40,11 +40,11 @@ class VectorTest {
         Vector v1 = new Vector(3, 6, 7);
 
         // ============ Equivalence Partitions Tests ==============
-        //TC01: Test that dot product of two vector with a acute angle is proper
+        //TC01: Test that dot product of two vector with an acute angle is proper
         Vector v2 = new Vector(2, 7, 1);
-        assertEquals(2 * 3 + 6 * 7 + 7 * 1, v1.dotProduct(v2), 0.00001, "dotProduct() wrong result for acute angle");
+        assertEquals(2 * 3 + 6 * 7 + 7, v1.dotProduct(v2), 0.00001, "dotProduct() wrong result for acute angle");
 
-        //TC02: test that dot product of two vectors with a obtuse angle is proper
+        //TC02: test that dot product of two vectors with an obtuse angle is proper
         Vector v3 = new Vector(-5, 2, 4);
         assertEquals((-5) * 3 + 2 * 6 + 4 * 7, v1.dotProduct(v3), 0.00001, "dotProduct() wrong result for obtuse angle");
 
@@ -55,7 +55,7 @@ class VectorTest {
         assertTrue(isZero(v1.dotProduct(v4)), "dotProduct() for two orthogonal vectors does not return 0");
 
         //TC12: test that dot product of two vectors when one of the vectors is a unit vector
-        assertEquals((0.8 * 3 + 0.6 * 6 + 0 * 7), v1.dotProduct((new Vector(4, 3, 0)).normalize()), 0.00001, "dotProduct() wrong result when one of the vectors is a unit vector");
+        assertEquals((0.8 * 3 + 0.6 * 6 + 0), v1.dotProduct((new Vector(4, 3, 0)).normalize()), 0.00001, "dotProduct() wrong result when one of the vectors is a unit vector");
     }
 
     /**

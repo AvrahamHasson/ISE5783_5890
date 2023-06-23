@@ -27,6 +27,15 @@ public class Polygon extends Geometry {
     private final int size;
 
     /**
+     * getter for the vertices number.
+     *
+     * @return The vertices number.
+     */
+    public int getSize() {
+        return size;
+    }
+
+    /**
      * Polygon constructor based on vertices list. The list must be ordered by edge
      * path. The polygon must be convex.
      *
@@ -113,7 +122,6 @@ public class Polygon extends Geometry {
         }
         //if all the vectors are in the same direction it means that the point is inside the polygon
         //so, we check it with dot product.
-        double num = 1;
         for(int i =0;i<lv.size() ;++i){
             for(int j = i + 1;j< lv.size();++j){
                 if((lv.get(i).dotProduct(lv.get(j))<0))

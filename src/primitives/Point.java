@@ -49,6 +49,7 @@ public class Point {
      *
      * @return the second coordinate.
      */
+    @SuppressWarnings("unused")
     public double getY() {
         return xyz.d2;
     }

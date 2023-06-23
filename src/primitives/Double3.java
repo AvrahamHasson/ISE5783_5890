@@ -18,6 +18,7 @@ public class Double3 {
     /**
      * One's triad (1,1,1)
      */
+    @SuppressWarnings("unused")
     public static final Double3 ONE = new Double3(1, 1, 1);
     /**
      * First number
@@ -138,6 +139,7 @@ public class Double3 {
      * @return true if all the numbers are less than k, false otherwise
      */
 
+    @SuppressWarnings("unused")
     public boolean lowerThan(double k) {
         return d1 < k && d2 < k && d3 < k;
     }
@@ -150,6 +152,7 @@ public class Double3 {
      * other
      * triad, false otherwise
      */
+    @SuppressWarnings("unused")
     public boolean lowerThan(Double3 other) {
         return d1 < other.d1 && d2 < other.d2 && d3 < other.d3;
     }
